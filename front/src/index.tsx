@@ -6,6 +6,7 @@ import { store } from './app/store';
 import { createBrowserRouter, RouterProvider } from "react-router-dom" 
 import IndexPage from './pages/index/IndexPage';
 import './index.css';
+import ServerInfoProvider from './features/meta/ServerInfoProvider';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -22,8 +23,10 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <App /> */}
-      <RouterProvider router={router} />
+      <ServerInfoProvider>
+        {/* <App /> */}
+        <RouterProvider router={router} />
+      </ServerInfoProvider>
     </Provider>
   </React.StrictMode>
 );

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import Dialog from "../dialog/Dialog";
 import styled from "styled-components";
 import rawContract from "./contract.txt";
+import classNames from "classnames";
+import { useSelector } from "react-redux";
+import { selectBackBasePath } from "../../features/meta/serverInfoSlice";
 
 interface SignUpDialogProp {
     show : boolean;
@@ -14,12 +17,60 @@ const SignUpDialog = ({show, widthPercentage, setShowDialog} : SignUpDialogProp)
     const [showContract, setShowContract] = useState(false);
     const [contractTxt, setContractTxt] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
+    const [userId, setUserId] = useState("");
+    const [password, setPassword] = useState("");
+    const [password2, setPassword2] = useState("");
+    const [nickname, setNickname] = useState("");
+
+    const basePath = useSelector(selectBackBasePath);
 
     useEffect(() => {
         fetch(rawContract)
             .then(r => r.text())
             .then(txt => setContractTxt(txt));
     }, []);
+
+    const handleSignUp = () => {
+        if(!(userId.trim().length >= 6)){
+            setErrorMessage("아이디를 6자리 이상으로 입력해주세요");
+            return;
+        }else if(!(password.trim().length >= 4)){
+            setErrorMessage("비밀번호를 4자리 이상으로 입력해주세요");
+            return;
+        }else if(!(password.trim() === password2.trim())){
+            setErrorMessage("비밀번호와 재확인 비밀번호를 일치시켜주세요");
+            return;
+        }else if(!(nickname.trim().length >= 2)){
+            setErrorMessage("닉네임을 2자리 이상으로 입력해주세요")
+            return;
+        }     
+
+        fetch(`${basePath}/sign-up`, {
+            method:"post",
+            headers: {
+                "Content-Type": "applicaiton/json;charset=utf-8"
+            },
+            body: JSON.stringify({
+                userId: userId.trim(),
+                password: password.trim(),
+                nickname: nickname.trim()
+            })
+        }).then(result => {
+            setUserId("");
+            setPassword("");
+            setPassword2("");
+            setNickname("");
+
+            setErrorMessage("");
+            setSuccessMessage("회원가입에 성공하였습니다.");
+        });
+        
+
+        
+
+    };
 
     return (
         <>
@@ -28,22 +79,37 @@ const SignUpDialog = ({show, widthPercentage, setShowDialog} : SignUpDialogProp)
                     <h1>회원가입</h1>
 
                     <InputFields>
-                        <input type="text" placeholder="아이디를 입력해주세요"/>
-                        <input type="password" placeholder="비밀번호를 입력해주세요" />
-                        <input type="password" placeholder="비밀번호를 똑같이 입력해주세요" />
-                        <input type="text" placeholder="닉네임을 입력해주세요"/>
-                        <p>{errorMessage}</p>
+                        <input 
+                            type="text" placeholder="아이디를 입력해주세요" 
+                            value={userId} 
+                            onChange={(e : React.ChangeEvent<HTMLInputElement>) => setUserId(e.target.value)}/>
+
+                        <input 
+                            type="password" placeholder="비밀번호를 똑같이 입력해주세요" 
+                            value={password} 
+                            onChange={(e : React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}/>
+                        <input 
+                            type="password" placeholder="비밀번호를 입력해주세요" 
+                            value={password2} 
+                            onChange={(e : React.ChangeEvent<HTMLInputElement>) => setPassword2(e.target.value)}/>
+                        <input 
+                            type="text" placeholder="닉네임을 입력해주세요"
+                            value={nickname}
+                            onChange={(e : React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}/>
+
+                        <ErrorPlaceholder>{errorMessage}</ErrorPlaceholder>
+                        <p>{successMessage}</p>
                     </InputFields>
 
                     <ButtonGroup>
-                        <button className="confirm">회원가입</button>
+                        <button className="confirm" onClick={handleSignUp}>회원가입</button>
                         <button onClick={() => setShowContract(!showContract)}>약관보기</button>
                         <button onClick={() => setShowDialog(false)}>닫기</button>
                     </ButtonGroup>
 
-                    {showContract && (
-                        <ContractContent readOnly value={contractTxt} />
-                    )}
+                    
+                    <ContractContent readOnly value={contractTxt} className={classNames({"show" : showContract})} />
+                    
                     
 
                 </Container>
@@ -100,11 +166,19 @@ const ContractContent = styled.textarea`
     border:0 none;
     border-right:1px solid #333;
     border-left:1px solid #333;
-    height:200px;
+    height:0px;
     resize:none;
     overflow-y:auto;
-    
+    transition:height 1s;
+
+    &.show{
+        height:200px;
+        transition:height 1s;
+    }
 `;
 
+const ErrorPlaceholder = styled.p`
+    color:#ff0000;
+`;
 
 export default SignUpDialog;
