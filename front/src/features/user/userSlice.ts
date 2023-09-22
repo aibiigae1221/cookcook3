@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit';
 import { RootState, /*AppThunk*/ } from '../../app/store';
+import { PURGE } from 'redux-persist';
 
 export interface userSliceState {
     jwt: string | null;
@@ -9,7 +10,7 @@ const initialState: userSliceState = {
     jwt: null
 };
 
-export interface loginThunkParamType {
+interface loginThunkParamType {
     userId: string;
     password: string;
 }
@@ -50,6 +51,13 @@ export const userSlice = createSlice({
         })
         .addCase(loginThunk.rejected, state => {
             
+        })
+        
+
+        .addCase(PURGE, state => {
+            console.log("purge reducer executed..");
+            state = initialState;
+            console.log(state);
         })
 
     //   .addCase(incrementAsync.pending, (state) => {

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAppSelector } from "../../app/hooks";
+import { persistor } from "../../app/store";
 
 interface TopBarProps {
     setShowSignUpDialog: (show : boolean) => void;
@@ -12,7 +13,8 @@ const TopBar = ({setShowSignUpDialog, setShowLoginDialog} : TopBarProps) => {
     const jwt = useAppSelector(state => state.user.jwt);
 
     const invalidateJwt = () => {
-        
+        persistor.purge();
+        window.location.reload();
     };
 
     return (

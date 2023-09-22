@@ -1,7 +1,7 @@
 import {ReactNode, useEffect} from "react";
 import { useAppDispatch } from "../../app/hooks";
-import { initialize, selectBackBasePath } from "./serverInfoSlice";
-import { useSelector } from "react-redux";
+import { initialize } from "./serverInfoSlice";
+
 
 interface ServerInfoProviderProps {
     children : ReactNode;
@@ -10,7 +10,6 @@ interface ServerInfoProviderProps {
 const ServerInfoProvider = ({children} : ServerInfoProviderProps) => {
 
     const dispatch = useAppDispatch();
-    const backendBasePath = useSelector(selectBackBasePath);
     
     useEffect(() => {
         dispatch(initialize());

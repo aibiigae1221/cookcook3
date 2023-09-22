@@ -23,7 +23,7 @@ const LogInDialog = ({show, setShowDialog} : LogInDialogProp) => {
         if(jwt !== null){
             setShowDialog(false);
         }
-    }, [jwt]);
+    }, [jwt, setShowDialog]);
 
     const handleLogin = () => {
         if(!(userId.trim().length >= 6)){
@@ -35,7 +35,7 @@ const LogInDialog = ({show, setShowDialog} : LogInDialogProp) => {
         }         
 
         setErrorMessage("");
-        // todo : 로그인 ajax & dispatch
+        
         dispatch(loginThunk({
             userId:userId,
             password:password

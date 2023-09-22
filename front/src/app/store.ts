@@ -1,11 +1,11 @@
-import { configureStore, ThunkAction, Action, combineReducers, createStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, combineReducers} from '@reduxjs/toolkit';
 import serverInfoReducer from '../features/meta/serverInfoSlice';
 import userReducer from '../features/user/userSlice';
 //import counterReducer from '../features/counter/counterSlice';
 import sessionStorage from 'redux-persist/es/storage/session';
 import persistReducer from 'redux-persist/es/persistReducer';
 import persistStore from 'redux-persist/es/persistStore';
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
+import { PERSIST, PURGE } from 'redux-persist';
 
 const persistConfig = {
   key: "root",
@@ -25,7 +25,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        ignoredActions: [PERSIST, PURGE]
       },
     })
 });
