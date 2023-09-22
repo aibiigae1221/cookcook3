@@ -1,12 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { persistor, store } from './app/store';
 // import App from './App';
 import { createBrowserRouter, RouterProvider } from "react-router-dom" 
 import IndexPage from './pages/index/IndexPage';
 import './index.css';
 import ServerInfoProvider from './features/meta/ServerInfoProvider';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -23,10 +24,12 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ServerInfoProvider>
-        {/* <App /> */}
-        <RouterProvider router={router} />
-      </ServerInfoProvider>
+      <PersistGate loading={<p>loading..</p>} persistor={persistor}>
+        <ServerInfoProvider>
+          {/* <App /> */}
+          <RouterProvider router={router} />
+        </ServerInfoProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

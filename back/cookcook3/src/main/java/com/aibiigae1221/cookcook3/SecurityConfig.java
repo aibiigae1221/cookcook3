@@ -43,12 +43,13 @@ public class SecurityConfig {
 		http
 				.authorizeHttpRequests((authorize) -> 
 						authorize
-							.requestMatchers("/member/sign-up").permitAll()
+							.requestMatchers("/member/sign-up", "/member/log-in").permitAll()
 							.anyRequest().authenticated()
 				)
 				.csrf((csrf) -> csrf.disable()) //csrf.ignoringRequestMatchers("/token"))
 				.httpBasic(Customizer.withDefaults())
 				.oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+				//.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.exceptionHandling((exceptions) -> exceptions
 						.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())

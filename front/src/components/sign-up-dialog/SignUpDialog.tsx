@@ -8,11 +8,10 @@ import { selectBackBasePath } from "../../features/meta/serverInfoSlice";
 
 interface SignUpDialogProp {
     show : boolean;
-    widthPercentage: number;
     setShowDialog: (show : boolean) => void;
 };
 
-const SignUpDialog = ({show, widthPercentage, setShowDialog} : SignUpDialogProp) => {
+const SignUpDialog = ({show, setShowDialog} : SignUpDialogProp) => {
 
     const [showContract, setShowContract] = useState(false);
     const [contractTxt, setContractTxt] = useState("");
@@ -32,6 +31,8 @@ const SignUpDialog = ({show, widthPercentage, setShowDialog} : SignUpDialogProp)
             .then(txt => setContractTxt(txt));
     }, []);
 
+
+
     const handleSignUp = () => {
         if(!(userId.trim().length >= 6)){
             setErrorMessage("아이디를 6자리 이상으로 입력해주세요");
@@ -47,17 +48,19 @@ const SignUpDialog = ({show, widthPercentage, setShowDialog} : SignUpDialogProp)
             return;
         }     
 
-        fetch(`${basePath}/sign-up`, {
+       
+
+        fetch(`${basePath}/member/sign-up`, {
             method:"post",
             headers: {
-                "Content-Type": "applicaiton/json;charset=utf-8"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 userId: userId.trim(),
                 password: password.trim(),
                 nickname: nickname.trim()
             })
-        }).then(result => {
+        }).then(_ => {
             setUserId("");
             setPassword("");
             setPassword2("");
@@ -65,16 +68,12 @@ const SignUpDialog = ({show, widthPercentage, setShowDialog} : SignUpDialogProp)
 
             setErrorMessage("");
             setSuccessMessage("회원가입에 성공하였습니다.");
-        });
-        
-
-        
-
+        }).catch(error => console.log(error));
     };
 
     return (
         <>
-            <Dialog show={show} widthPercentage={widthPercentage} setShowDialog={setShowDialog}>
+            <Dialog show={show} widthPx={450} setShowDialog={setShowDialog}>
                 <Container>
                     <h1>회원가입</h1>
 

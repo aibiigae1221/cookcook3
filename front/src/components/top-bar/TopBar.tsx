@@ -1,17 +1,38 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useAppSelector } from "../../app/hooks";
 
 interface TopBarProps {
     setShowSignUpDialog: (show : boolean) => void;
+    setShowLoginDialog : (show : boolean) => void;
 };
 
-const TopBar = ({setShowSignUpDialog} : TopBarProps) => {
+const TopBar = ({setShowSignUpDialog, setShowLoginDialog} : TopBarProps) => {
+
+    const jwt = useAppSelector(state => state.user.jwt);
+
+    const invalidateJwt = () => {
+        
+    };
 
     return (
         <Container>
             <LinkUnOrderedList>
-                <li><a href="/">홈</a></li>
-                <li><a href="/">로그인</a></li>
-                <li onClick={() => setShowSignUpDialog(true)}>회원가입</li>
+                <li><Link to={"/"}>홈</Link></li>
+                {jwt === null && (
+                    <>
+                        <li onClick={() => setShowLoginDialog(true)}>로그인</li>
+                        <li onClick={() => setShowSignUpDialog(true)}>회원가입</li>
+                    </>
+                )}
+
+                {jwt !== null && (
+                    <>
+                        <li onClick={() => invalidateJwt()}>로그아웃</li>
+                    </>
+                )}
+
+                
             </LinkUnOrderedList>
         </Container>
     );

@@ -6,7 +6,7 @@ export interface ServerInfoSliceState {
 }
 
 const initialState: ServerInfoSliceState = {
-    backBasePath: "http://127.0.0.1/"
+    backBasePath: "http://127.0.0.1:8080"
 };
 
 
@@ -28,11 +28,11 @@ export const ServerInfoSlice = createSlice({
         // console.log(process.env.NODE_ENV);
         switch(process.env.NODE_ENV){
             case "development":
-                state.backBasePath = "http://127.0.0.1/";
+                state.backBasePath = "http://127.0.0.1:8080";
                 break;
 
             default:
-                state.backBasePath = "http://127.0.0.1/";
+                state.backBasePath = "http://127.0.0.1:8080";
         }
     }
     // increment: (state) => {

@@ -17,7 +17,7 @@ import com.aibiigae1221.cookcook3.data.repository.MemberRepository;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class Cookcook3ApplicationTests {
+class SignUpTests {
 
 	
 	private static final String MEMBER_ID = "testid123";

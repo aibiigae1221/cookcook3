@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 interface DialogProps{
     children : ReactNode;
-    widthPercentage : number;
+    widthPx : number;
     show: boolean;
     setShowDialog: (show : boolean) => void;
 }
 
-const Dialog = ({widthPercentage, show, setShowDialog, children} : DialogProps) => {
+const Dialog = ({widthPx, show, setShowDialog, children} : DialogProps) => {
 
     const handleClose = () => setShowDialog(false);
 
@@ -18,7 +18,7 @@ const Dialog = ({widthPercentage, show, setShowDialog, children} : DialogProps) 
 
     return (
         <BackgroundWrapper>
-            <ContentContainer $widthPercentage={widthPercentage}>
+            <ContentContainer $widthPx={widthPx}>
                 {children}
                 <CloseButton onClick={handleClose}>X</CloseButton>
             </ContentContainer>
@@ -37,11 +37,11 @@ const BackgroundWrapper = styled.div`
 
 `;
 
-const ContentContainer = styled.div<{$widthPercentage : number}>`
+const ContentContainer = styled.div<{$widthPx : number}>`
     background-color:#fff;
     z-index:1;
     position:absolute;
-    width: ${props => props.$widthPercentage}%;
+    width: ${props => props.$widthPx}px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
